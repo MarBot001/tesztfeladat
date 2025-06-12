@@ -27,7 +27,8 @@ class Group extends ActiveRecord
         $groups = [];
 
         foreach ($query as $item) {
-            $groups[$item['id']] = $item + ['children' => []];
+            $item['children'] = [];
+            $groups[$item['id']] = $item;
         }
 
         foreach ($groups as $id => &$group) {
@@ -35,11 +36,13 @@ class Group extends ActiveRecord
                 $groups[$group['parent_id']]['children'][] = &$group;
             }
         }
+        unset($group);
 
         $result = [];
-        foreach ($groups as $group) {
-            if ($onlyRoots && $group['parent_id']) continue;
-            if (!$group['parent_id']) $result[] = $group;
+        foreach ($groups as $id => $group) {
+            if (!$group['parent_id']) {
+                $result[] = $group;
+            }
         }
 
         return $result;
