@@ -21,7 +21,7 @@ class Group extends ActiveRecord
         return 'group';
     }
 
-    public static function getHierarchy($onlyRoots = false)
+    public static function getHierarchy()
     {
         $query = static::find()->where(['is_deleted' => 0])->asArray()->all();
         $groups = [];
