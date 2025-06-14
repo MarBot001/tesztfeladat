@@ -21,7 +21,19 @@ class Group extends ActiveRecord
         return 'group';
     }
 
-    public static function getHierarchy()
+        /**
+     * Visszaadja a csoportok fastruktúráját tömbben, kihagyva a törölt elemeket.
+     *
+     * Ezzel a metódussal lekérhetőek a csoportok úgy, hogy a parents - child kapcsolatok is látszanak.
+     *
+     * Ha kell csak a legfelső szintű (ős) csoportokat adja vissza, ebben az esetben $onlyRoots= true szükséges. 
+     * Alapból az egész hierarchiát visszaadja (childokkal).
+     *
+     * @param bool $onlyRoots Ha true, csak a legfelső csoportokat adja vissza, childs nélkül.
+     *                        Ha false, akkor az egész fa visszajön, minden leszármazottal.
+     * @return array A csoportok hierarchiája tömbként, ahol a parents alatt ott vannak a childok (children mezőben).
+     */
+    public static function getHierarchy($onlyRoots = false)
     {
         $query = static::find()->where(['is_deleted' => 0])->asArray()->all();
         $groups = [];
@@ -41,10 +53,17 @@ class Group extends ActiveRecord
         $result = [];
         foreach ($groups as $id => $group) {
             if (!$group['parent_id']) {
-                $result[] = $group;
+                if ($onlyRoots) {
+                    $groupCopy = $group;
+                    $groupCopy['children'] = []; // csak a főcsoportot adja vissza, gyerekek nélkül
+                    $result[] = $groupCopy;
+                } else {
+                    $result[] = $group;
+                }
             }
         }
 
         return $result;
     }
+
 }

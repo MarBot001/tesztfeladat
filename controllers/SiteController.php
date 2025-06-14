@@ -61,9 +61,10 @@ class SiteController extends Controller
         $groups = [];
         if (Yii::$app->user->can('ManageGroups')) {
             $groups = Group::getHierarchy();
+            $roots = Group::getHierarchy(true);
         }
         return $this->render('index', [
-            'groups' => $groups,
+            'roots' => isset($roots) ? $roots : [],
         ]);
     }
 
