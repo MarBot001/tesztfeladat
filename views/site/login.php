@@ -5,7 +5,7 @@ use yii\bootstrap5\ActiveForm;
 $this->title = 'Bejelentkezés';
 ?>
 <div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <br><br><h1><?= Html::encode($this->title) ?></h1><br><br>
 
 
     <?php $form = ActiveForm::begin([
@@ -17,9 +17,9 @@ $this->title = 'Bejelentkezés';
         ],
     ]); ?>
 
-        <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
+        <?= $form->field($model, 'username')->textInput(['autofocus' => true])->label('Felhasználónév') ?>
 
-        <?= $form->field($model, 'password')->passwordInput() ?>
+        <?= $form->field($model, 'password')->passwordInput()->label('Jelszó') ?> 
 
         <?= $form->field($model, 'rememberMe')->checkbox([
             'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
